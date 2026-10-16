@@ -1,0 +1,65 @@
+# RAIS publications: test on every push and merge request; rebuild from the
+# ERef feed and deploy to GitLab Pages on the default branch, on a pipeline
+# schedule (CI/CD → Schedules, e.g. weekly) and on a manual run.
+#
+# The pages job downloads EmbeddingGemma 2 (~1.5 GB) once and keeps it, the
+# pip wheels and the per-card vector cache in the CI cache, so a scheduled
+# rebuild only embeds new or edited records. The model is open (Apache 2.0)
+# and needs no token; set HF_TOKEN as a masked CI variable only if the Hub
+# starts rate-limiting the runner.
+
+default:
+  image: python:3.13.16-slim-trixie
+  interruptible: true
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  HF_HOME: "$CI_PROJECT_DIR/.cache/huggingface"
+  PYTHONUNBUFFERED: "1"
+  # Keep the CPU threads to what the runner offers.
+  OMP_NUM_THREADS: "4"
+
+stages:
+  - test
+  - deploy
+
+test:
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_PIPELINE_SOURCE == "push"
+  cache:
+    key: pip-dev-py313
+    paths:
+      - .cache/pip
+  script:
+    - pip install -r requirements-dev.txt
+    - ruff check .
+    - ruff format --check .
+    - pytest -q
+
+pages:
+  stage: deploy
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"
+  # Keyed on the pinned model revision: a new revision is a new vector space,
+  # so it starts a fresh cache rather than mixing two.
+  cache:
+    - key: embeddinggemma-2-914f7f89142e
+      paths:
+        - .cache/huggingface
+        - build/cache
+    - key: pip-model-py313
+      paths:
+        - .cache/pip
+  timeout: 2h
+  script:
+    - pip install -r requirements-model.txt
+    - python -m rais build --out public
+    - cat public/data/report.json
+  artifacts:
+    paths:
+      - public
+    expire_in: 30 days

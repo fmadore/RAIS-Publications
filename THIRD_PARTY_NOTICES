@@ -1,0 +1,48 @@
+RAIS publications is licensed under GPL-3.0-or-later (see LICENSE).
+
+Ported code
+-----------
+
+web/assets/js/semantic-map.js, entity-graph.js and entity-graph-ui.js are
+adapted from DREVisualizations (Africa Multiple Cluster of Excellence,
+University of Bayreuth; GPL-3.0-or-later): asset/js/semantic-map.js,
+asset/js/entity-graph.js, asset/js/entity-graph-ui.js. web/assets/js/rv-shim.js
+re-implements the subset of its dashboard-core.js helpers they call
+(ns.graphStep is copied from asset/js/core/graph-walk.js). The embedding
+contract in rais/embeddings.py follows its tools/embeddings/build_embeddings.py
+and docs/SEMANTIC_EMBEDDINGS.md; the EP3 parsing in rais/ep3.py follows
+MongoDB2OmekaS clients/publications/ep3.py.
+
+Self-hosted browser libraries (unmodified, vendored by scripts/vendor_libs.py
+from the npm registry after checking each tarball's sha512 integrity)
+---------------------------------------------------------------------
+
+Apache ECharts 6.1.0
+  Files: web/vendor/echarts.min.js
+  License: Apache-2.0 — web/vendor/echarts.LICENSE.txt, web/vendor/echarts.NOTICE.txt
+  Project: https://echarts.apache.org/
+  SHA-256 echarts.min.js  b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0
+
+MapLibre GL JS 6.14.0 — RENAMED
+  Files: web/vendor/maplibre-gl.js (dist/maplibre-gl.mjs),
+         web/vendor/maplibre-gl-worker.js (dist/maplibre-gl-worker.mjs),
+         web/vendor/maplibre-gl.css
+  License: BSD-3-Clause, with notices for incorporated code —
+           web/vendor/maplibre-gl.LICENSE.txt
+  Project: https://maplibre.org/
+  MapLibre 6 ships ES modules as .mjs, which some static servers do not type
+  as JavaScript; the files are copied byte for byte under .js names.
+  SHA-256 maplibre-gl.js         244d36122c1398da3a8259817cc6d71e04321afe6404f32606b4b6c6cc4f26fb
+  SHA-256 maplibre-gl-worker.js  5f1e2f0e1624082b7e88a06e4c86085992b0f8c02929801e552f3f7a119856a9
+  SHA-256 maplibre-gl.css        bacba6a85a867fcf602f2ff88331b8acf7edf3fbd063a519888cfbff39970193
+
+Noto Sans Regular (MapLibre SDF glyph ranges)
+  Files: web/fonts/Noto Sans Regular/*.pbf (copied from DREVisualizations)
+  License: SIL Open Font License 1.1 — web/fonts/OFL.txt
+  Project: https://fonts.google.com/noto
+
+Model (downloaded at build time, not distributed)
+-------------------------------------------------
+
+google/embeddinggemma-2, revision 914f7f89142e33e77833254d9c9b90c3cef7303b,
+Apache-2.0 open weights: https://huggingface.co/google/embeddinggemma-2

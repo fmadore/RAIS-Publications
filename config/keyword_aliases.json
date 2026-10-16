@@ -1,0 +1,115 @@
+{
+  "_comment": "Author keywords in ERef are free text. Every keyword is first folded (case, accents, hyphens, whitespace, a trailing '(ACRONYM)'), and a plural merges into its singular when both occur. 'aliases' then maps the remaining variants onto one display label: the key is the label, the list holds the variants (any spelling; they are folded the same way). 'ignore' drops keywords that describe the genre rather than the topic. Unlisted keywords keep their most frequent spelling.",
+  "aliases": {
+    "Explainable AI (XAI)": [
+      "xai",
+      "explainable ai",
+      "explainable artificial intelligence",
+      "explainable artificial intelligence (xai)"
+    ],
+    "Large language models (LLMs)": [
+      "large language model",
+      "large language models",
+      "large language models (llms)",
+      "llm",
+      "llms"
+    ],
+    "Artificial intelligence": [
+      "ai",
+      "artificial intelligence",
+      "artifical intelligence",
+      "künstliche intelligenz",
+      "ki"
+    ],
+    "Generative AI": [
+      "genai",
+      "generative ai",
+      "generative artificial intelligence",
+      "generative ki",
+      "generative künstliche intelligenz"
+    ],
+    "AI agents": [
+      "al agents",
+      "ai agents"
+    ],
+    "Human–computer interaction (HCI)": [
+      "human computer interaction",
+      "human-computer interaction",
+      "human computer interaction (hci)",
+      "hci"
+    ],
+    "Human–AI collaboration": [
+      "human-ai collaboration"
+    ],
+    "Digital humanities": [
+      "digital humanities",
+      "digital humanities (dh)",
+      "digital humanity"
+    ],
+    "Natural language processing (NLP)": [
+      "natural language processing",
+      "natural language processing (nlp)",
+      "nlp"
+    ],
+    "Data-centric AI": [
+      "data-centric artificial intelligence",
+      "data-centric ai",
+      "dcai",
+      "data-centric"
+    ],
+    "Concept-based explanations": [
+      "concept-based explanations",
+      "concept-based explanations (c-xai)"
+    ],
+    "Multi-agent systems": [
+      "multi-agent systems",
+      "multi-agent-system"
+    ],
+    "Model Context Protocol (MCP)": [
+      "mcp",
+      "mcp server"
+    ],
+    "Business process management": [
+      "business process management",
+      "bpm"
+    ],
+    "Computer vision": [
+      "computer vision",
+      "computer vision tasks"
+    ],
+    "Bayesian optimisation": [
+      "bayesian optimisation",
+      "bayesian optimization"
+    ],
+    "Digitalisation": [
+      "digitalisation",
+      "digitalization"
+    ],
+    "Triple extraction": [
+      "triple extraction",
+      "triples extraction"
+    ],
+    "International bilateral trade flow data": [
+      "international bilateral trade flow data",
+      "international economic bilateral trade flow data"
+    ],
+    "Urinary bladder monitoring": [
+      "bladder monitoring",
+      "urinary bladder monitoring"
+    ],
+    "Twin-screw extruder": [
+      "twin screw extruder",
+      "twin-screw extruder"
+    ]
+  },
+  "ignore": [
+    "abschlussbericht",
+    "essay",
+    "manifesto",
+    "method",
+    "studies",
+    "theory",
+    "whitepaper",
+    "workshop"
+  ]
+}

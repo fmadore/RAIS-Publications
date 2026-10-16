@@ -1,0 +1,4 @@
+* text=auto eol=lf
+# Vendored verbatim from npm; THIRD_PARTY_NOTICES lists their SHA-256.
+web/vendor/** -text
+*.pbf binary

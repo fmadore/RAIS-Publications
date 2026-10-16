@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RAIS publications</title>
+  <meta name="description" content="Embeddable visualisations of the RAIS publications recorded in ERef Bayreuth.">
+  <link rel="stylesheet" href="assets/css/rais.css">
+</head>
+<body>
+  <main class="page">
+    <header class="page-header">
+      <h1>RAIS publications</h1>
+      <nav class="page-nav" aria-label="Visualisations">
+        <a href="index.html" aria-current="page">Overview</a>
+        <a href="semantic-map.html">Semantic map</a>
+        <a href="keyword-network.html">Keyword network</a>
+        <a href="coauthor-network.html">Co-author network</a>
+        <a href="dashboard.html">Dashboard</a>
+      </nav>
+    </header>
+    <p class="page-intro" id="summary">Four views of the RAIS publications recorded in ERef, the University of Bayreuth repository. Each page can be embedded in another website as an iframe, with its own controls and filters.</p>
+
+    <div class="cards">
+      <section class="panel card">
+        <h2><a href="semantic-map.html">Semantic map</a></h2>
+        <p>Publications placed by what their title, keywords and abstract say, grouped into topics.</p>
+      </section>
+      <section class="panel card">
+        <h2><a href="keyword-network.html">Keyword network</a></h2>
+        <p>Author keywords linked when they appear on the same publication.</p>
+      </section>
+      <section class="panel card">
+        <h2><a href="coauthor-network.html">Co-author network</a></h2>
+        <p>Authors linked by their joint publications.</p>
+      </section>
+      <section class="panel card">
+        <h2><a href="dashboard.html">Dashboard</a></h2>
+        <p>Publications by year, type, topic, keyword and author, with the full list.</p>
+      </section>
+    </div>
+
+    <section class="panel" style="margin-top:12px">
+      <h2>Embed a visualisation</h2>
+      <p class="page-intro">Paste the snippet into any HTML page. The script after the iframe resizes it to its content; paste it once per page even with several iframes. Any filter can be preset in the URL: <code>year=2023-2025</code>, <code>type=article,preprint</code>, <code>keyword=Explainable AI (XAI)</code>, <code>author=Kühl, Niklas</code>, <code>cluster=3</code>. Every page also has a <em>Copy embed code</em> button that captures its current filters.</p>
+      <div class="facets" id="embed-form">
+        <label class="facet"><span>Visualisation</span>
+          <select id="embed-page">
+            <option value="semantic-map.html">Semantic map</option>
+            <option value="keyword-network.html">Keyword network</option>
+            <option value="coauthor-network.html">Co-author network</option>
+            <option value="dashboard.html">Dashboard</option>
+          </select>
+        </label>
+        <label class="facet"><span>Theme</span>
+          <select id="embed-theme">
+            <option value="">Follow the visitor's system</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+        <label class="facet"><span>Filters (URL query)</span>
+          <input id="embed-query" type="text" placeholder="year=2024&amp;keyword=Machine learning">
+        </label>
+        <label class="facet"><span>Header</span>
+          <select id="embed-header"><option value="">Show title and intro</option><option value="0">Hide</option></select>
+        </label>
+        <label class="facet"><span>Controls</span>
+          <select id="embed-controls"><option value="">Show filters and tools</option><option value="0">Hide (static view)</option></select>
+        </label>
+      </div>
+      <textarea class="snippet" id="embed-snippet" readonly aria-label="Embed snippet"></textarea>
+      <div class="side-actions"><button class="btn" type="button" id="embed-copy">Copy</button> <a class="btn" id="embed-open" href="#" target="_blank" rel="noopener" style="line-height:30px;text-decoration:none">Open preview</a></div>
+    </section>
+
+    <footer class="page-footer">
+      Data: <a href="https://eref.uni-bayreuth.de/" target="_blank" rel="noopener">ERef Bayreuth</a>, RAIS division export ·
+      <a href="data/report.json">build report</a> · <span id="generated"></span>
+    </footer>
+  </main>
+  <script src="assets/js/rv-shim.js"></script>
+  <script>
+    (function () {
+      var ns = window.RV;
+      var HEIGHTS = { 'semantic-map.html': 900, 'keyword-network.html': 960, 'coauthor-network.html': 960, 'dashboard.html': 1500 };
+      var $ = function (id) { return document.getElementById(id); };
+      function update() {
+        var page = $('embed-page').value;
+        var params = new URLSearchParams($('embed-query').value.replace(/^\?/, ''));
+        if ($('embed-theme').value) params.set('theme', $('embed-theme').value);
+        if ($('embed-header').value) params.set('header', '0');
+        if ($('embed-controls').value) params.set('controls', '0');
+        var qs = params.toString();
+        var url = new URL(page, document.baseURI).href + (qs ? '?' + qs : '');
+        var title = $('embed-page').selectedOptions[0].textContent + ' · RAIS publications';
+        $('embed-snippet').value = ns.embedSnippet(url, title, HEIGHTS[page]);
+        $('embed-open').href = url;
+      }
+      ['embed-page', 'embed-theme', 'embed-header', 'embed-controls'].forEach(function (id) { $(id).addEventListener('change', update); });
+      $('embed-query').addEventListener('input', update);
+      $('embed-copy').addEventListener('click', function () {
+        ns.copyToClipboard($('embed-snippet').value).then(function () {
+          $('embed-copy').textContent = 'Copied';
+          setTimeout(function () { $('embed-copy').textContent = 'Copy'; }, 2000);
+        });
+      });
+      update();
+      ns.loadPublications().then(function (data) {
+        var years = data.publications.map(function (p) { return p.year; }).filter(Boolean);
+        $('summary').textContent = 'Four views of the ' + data.publications.length + ' RAIS publications ('
+          + Math.min.apply(null, years) + '–' + Math.max.apply(null, years) + ') recorded in ERef, the University of Bayreuth repository. '
+          + 'Each page can be embedded in another website as an iframe, with its own controls and filters.';
+        $('generated').textContent = 'Built ' + data.generatedAt.slice(0, 10);
+      }).catch(function () { /* the static text stands */ });
+    })();
+  </script>
+</body>
+</html>

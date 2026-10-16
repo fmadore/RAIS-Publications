@@ -1,0 +1,11 @@
+# Generated: the pipeline rebuilds both from the ERef feed.
+/build/
+/dist/
+/public/
+
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.cache/

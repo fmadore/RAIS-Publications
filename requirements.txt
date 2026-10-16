@@ -1,0 +1,5 @@
+# Pipeline without the model: fetch, normalise, networks, site. Enough for
+# `python -m rais build --skip-embeddings` and the offline test suite.
+networkx==3.7
+numpy==2.5.4
+requests==2.34.2

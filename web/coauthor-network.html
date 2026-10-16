@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Co-author network · RAIS publications</title>
+  <meta name="description" content="Authors are linked when they have written a publication together; the more joint publications, the thicker the link.">
+  <link rel="stylesheet" href="vendor/maplibre-gl.css">
+  <link rel="stylesheet" href="assets/css/rais.css">
+</head>
+<body>
+  <main class="page">
+    <header class="page-header">
+      <h1>Co-author network</h1>
+      <nav class="page-nav" aria-label="Visualisations">
+        <a href="index.html">Overview</a>
+        <a href="semantic-map.html">Semantic map</a>
+        <a href="keyword-network.html">Keyword network</a>
+        <a href="coauthor-network.html" aria-current="page">Co-author network</a>
+        <a href="dashboard.html">Dashboard</a>
+      </nav>
+    </header>
+    <p class="page-intro">Authors are linked when they have written a publication together; the more joint publications, the thicker the link. Colours show whether an author is affiliated with the University of Bayreuth in ERef, or the group of co-authors they work with most. Filters above recount the network without moving it.</p>
+    <div data-rv="network" data-src="data/coauthor-network.json" data-facet="author" data-name="rais-coauthor-network"
+         data-title="Co-author network" data-noun="author" data-nouns="authors" data-noun-label="Author"
+         data-filter-label="Filter by this author" data-color="type"
+         data-label="Network of authors who have published together."></div>
+    <footer class="page-footer">
+      Data: <a href="https://eref.uni-bayreuth.de/" target="_blank" rel="noopener">ERef Bayreuth</a>, RAIS division export, rebuilt on a schedule ·
+      <a href="data/report.json">build report</a>
+    </footer>
+  </main>
+  <script src="assets/js/rv-shim.js"></script>
+  <script src="assets/js/facets.js"></script>
+  <script src="assets/js/entity-graph-ui.js"></script>
+  <script src="assets/js/entity-graph.js"></script>
+</body>
+</html>

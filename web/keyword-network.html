@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Keyword network · RAIS publications</title>
+  <meta name="description" content="Author keywords are linked when they appear on the same publication; the more publications they share, the thicker the link and the closer they sit.">
+  <link rel="stylesheet" href="vendor/maplibre-gl.css">
+  <link rel="stylesheet" href="assets/css/rais.css">
+</head>
+<body>
+  <main class="page">
+    <header class="page-header">
+      <h1>Keyword network</h1>
+      <nav class="page-nav" aria-label="Visualisations">
+        <a href="index.html">Overview</a>
+        <a href="semantic-map.html">Semantic map</a>
+        <a href="keyword-network.html" aria-current="page">Keyword network</a>
+        <a href="coauthor-network.html">Co-author network</a>
+        <a href="dashboard.html">Dashboard</a>
+      </nav>
+    </header>
+    <p class="page-intro">Author keywords are linked when they appear on the same publication; the more publications they share, the thicker the link and the closer they sit. Spelling variants are merged (for example XAI, explainable AI and explainable artificial intelligence). Filters above recount the network without moving it.</p>
+    <div data-rv="network" data-src="data/keyword-network.json" data-facet="keyword" data-name="rais-keyword-network"
+         data-title="Keyword network" data-noun="keyword" data-nouns="keywords" data-noun-label="Keyword"
+         data-filter-label="Filter by this keyword" data-color="community"
+         data-label="Network of author keywords that appear on the same publications."></div>
+    <footer class="page-footer">
+      Data: <a href="https://eref.uni-bayreuth.de/" target="_blank" rel="noopener">ERef Bayreuth</a>, RAIS division export, rebuilt on a schedule ·
+      <a href="data/report.json">build report</a>
+    </footer>
+  </main>
+  <script src="assets/js/rv-shim.js"></script>
+  <script src="assets/js/facets.js"></script>
+  <script src="assets/js/entity-graph-ui.js"></script>
+  <script src="assets/js/entity-graph.js"></script>
+</body>
+</html>
