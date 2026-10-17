@@ -149,21 +149,26 @@ Checks: `pytest`, `ruff check .`, `ruff format --check .`.
    and `dist/data/report.json`, which has counts, merges, topic names and
    file sizes.
 
-## Deployment (GitLab Pages)
+## Deployment (GitHub Pages)
 
-[`.gitlab-ci.yml`](.gitlab-ci.yml) has two jobs:
+The site is published at <https://fmadore.github.io/RAIS-Publications/>.
+[`.github/workflows/pages.yml`](.github/workflows/pages.yml) has three jobs:
 
-- **`test`** runs on every push and merge request: ruff and pytest, without
+- **`test`** runs on every push and pull request: ruff and pytest, without
   the model.
-- **`pages`** runs on the default branch, on a manual *Run pipeline*, and on
-  a pipeline schedule. It installs the model stack, builds into `public/`
-  and publishes it. Set up the schedule under *Build → Pipeline schedules*;
-  weekly is enough for ERef.
+- **`build`** runs after `test` on `main`: on a push, every Monday, and on a
+  manual *Actions → Pages → Run workflow*. It installs the model stack and
+  builds into `public/`.
+- **`deploy`** publishes `public/` to GitHub Pages.
 
-The `pages` job caches the Hugging Face model, the pip wheels and the vector
-cache, keyed on the model revision. A scheduled run therefore downloads
-nothing large and embeds only what changed. The model is open, so no token
-is needed.
+Pages must use *GitHub Actions* as its source (*Settings → Pages → Build and
+deployment*). The `build` job caches the Hugging Face model, the pip wheels
+and the vector cache, keyed on the model revision. A scheduled run therefore
+downloads nothing large and embeds only what changed. The model is open, so
+no token is needed.
+
+[`.gitlab-ci.yml`](.gitlab-ci.yml) does the same on GitLab Pages, if the
+project moves back there.
 
 ## Updating the vendored libraries
 

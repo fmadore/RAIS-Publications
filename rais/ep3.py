@@ -21,7 +21,7 @@ from . import EPRINT_URL, FEED_URL
 EP3_NS = {"ep": "http://eprints.org/ep2/data/2.0"}
 SPACE_RE = re.compile(r"\s+")
 YEAR_RE = re.compile(r"^(\d{4})")
-USER_AGENT = "rais-publications/0.1 (+https://gitlab.uni-bayreuth.de)"
+USER_AGENT = "rais-publications/0.1 (+https://github.com/fmadore/RAIS-Publications)"
 
 
 def fetch_feed(path: Path, url: str = FEED_URL, attempts: int = 4) -> Path:
