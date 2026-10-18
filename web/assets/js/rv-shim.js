@@ -126,7 +126,9 @@
     ns.ICONS = {
         reset: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>',
         save: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>',
-        csv: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>'
+        csv: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>',
+        expand: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>',
+        collapse: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/></svg>'
     };
     ns.iconButton = function (svg, label, title) {
         var b = ns.el('button', 'btn btn-icon');
@@ -134,6 +136,30 @@
         b.innerHTML = svg;
         b.setAttribute('aria-label', label);
         b.title = title || label;
+        return b;
+    };
+
+    /**
+     * Full-screen toggle for the whole page, so the facets and toolbars stay
+     * usable; the stylesheet grows the canvas to the screen (html:fullscreen).
+     * Null where the browser or the host page's iframe does not allow it
+     * (iPhone Safari, an iframe without allowfullscreen).
+     */
+    ns.fullscreenButton = function () {
+        var root = document.documentElement;
+        if (!document.fullscreenEnabled || !root.requestFullscreen) return null;
+        var b = ns.iconButton(ns.ICONS.expand, 'Full screen');
+        function sync() {
+            var on = document.fullscreenElement === root;
+            b.innerHTML = on ? ns.ICONS.collapse : ns.ICONS.expand;
+            b.setAttribute('aria-label', on ? 'Exit full screen' : 'Full screen');
+            b.title = on ? 'Exit full screen (Esc)' : 'Full screen';
+        }
+        b.addEventListener('click', function () {
+            var request = document.fullscreenElement ? document.exitFullscreen() : root.requestFullscreen();
+            if (request && request.catch) request.catch(function () { /* refused by the browser */ });
+        });
+        document.addEventListener('fullscreenchange', sync);
         return b;
     };
 
@@ -289,7 +315,7 @@
     ns.embedSnippet = function (src, title, height) {
         var px = Math.max(1, Math.round(Number(height) || 700));
         return '<iframe src="' + ns.escapeHtml(src) + '" title="' + ns.escapeHtml(title || '') + '"'
-            + ' loading="lazy" style="width:100%;border:0;height:' + px + 'px"></iframe>\n' + ns.embedListener;
+            + ' loading="lazy" allowfullscreen style="width:100%;border:0;height:' + px + 'px"></iframe>\n' + ns.embedListener;
     };
 
     // The embed's half: post the document height whenever it changes.

@@ -3,8 +3,8 @@
  * combobox keys, the group filter, the export buttons and the text
  * alternative. Ported from DREVisualizations asset/js/entity-graph-ui.js;
  * it only talks back through the hooks it is handed and knows nothing about
- * MapLibre. (The fullscreen control is not ported: an embed is resized by
- * its host page.)
+ * MapLibre. (Its fullscreen control is not ported: the facet bar's
+ * page-wide button, RV.fullscreenButton, replaces it.)
  *
  * Copyright (C) the DREVisualizations authors and contributors.
  * SPDX-License-Identifier: GPL-3.0-or-later

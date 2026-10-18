@@ -243,3 +243,13 @@ details.rv-list > summary { cursor: pointer; color: var(--text-2); }
 .card h2 { font-size: 1.05rem; margin: 0 0 4px; }
 .card p { margin: 0 0 8px; color: var(--text-2); font-size: .9rem; }
 .snippet { width: 100%; min-height: 96px; font: 12px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; background: var(--surface-2); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px; resize: vertical; }
+
+/* Full screen (RV.fullscreenButton): the page fills the screen, so the
+   title and intro make way and the canvas takes the remaining height. The
+   320px offset is the facet bar, toolbar, status and legend around it,
+   measured on a 1600px-wide screen. */
+html:fullscreen { overflow: auto; background: var(--bg); }
+html:fullscreen .page { max-width: none; }
+html:fullscreen .page-header, html:fullscreen .page-intro, html:fullscreen .page-footer { display: none; }
+html:fullscreen .canvas { height: max(420px, calc(100vh - 320px)); }
+html:fullscreen .sidebar { max-height: max(420px, calc(100vh - 320px)); }

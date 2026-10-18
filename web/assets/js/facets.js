@@ -228,6 +228,8 @@
         actions.appendChild(count);
         actions.appendChild(reset);
         actions.appendChild(embed);
+        var fullscreen = ns.fullscreenButton();
+        if (fullscreen) actions.appendChild(fullscreen);
         bar.appendChild(actions);
         host.appendChild(bar);
 

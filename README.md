@@ -30,31 +30,35 @@ filters. A snippet is the iframe plus a short script that resizes it:
 
 ```html
 <iframe src="https://PAGES-URL/semantic-map.html?year=2024-2026&theme=light"
-        title="Semantic map · RAIS publications" loading="lazy"
+        title="Semantic map · RAIS publications" loading="lazy" allowfullscreen
         style="width:100%;border:0;height:900px"></iframe>
 <script>(function(){if(window.__raisEmbedResize)return;window.__raisEmbedResize=1;window.addEventListener('message',function(e){if(!e.data||e.data.type!=='rais-embed-height')return;var f=document.getElementsByTagName('iframe');for(var i=0;i<f.length;i++){if(f[i].contentWindow===e.source){f[i].style.height=e.data.height+'px';}}});})();</script>
 ```
 
 ```html
 <iframe src="https://PAGES-URL/keyword-network.html?keyword=Explainable%20AI%20(XAI)&header=0"
-        title="Keyword network · RAIS publications" loading="lazy"
+        title="Keyword network · RAIS publications" loading="lazy" allowfullscreen
         style="width:100%;border:0;height:960px"></iframe>
 ```
 
 ```html
 <iframe src="https://PAGES-URL/coauthor-network.html?author=K%C3%BChl%2C%20Niklas&color=group"
-        title="Co-author network · RAIS publications" loading="lazy"
+        title="Co-author network · RAIS publications" loading="lazy" allowfullscreen
         style="width:100%;border:0;height:960px"></iframe>
 ```
 
 ```html
 <iframe src="https://PAGES-URL/dashboard.html?type=article,book_section"
-        title="Publications dashboard · RAIS publications" loading="lazy"
+        title="Publications dashboard · RAIS publications" loading="lazy" allowfullscreen
         style="width:100%;border:0;height:1500px"></iframe>
 ```
 
 Paste the `<script>` once per host page, even when it holds several iframes.
 Without it, an iframe keeps the fixed height given in its `style`.
+
+Every page has a full-screen button at the end of its facet bar. Inside an
+iframe it needs the `allowfullscreen` attribute, which the copied snippets
+include; browsers that cannot go full screen (iPhone Safari) hide it.
 
 ### URL parameters
 
