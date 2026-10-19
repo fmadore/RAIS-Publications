@@ -75,6 +75,12 @@
         var facets = ns.facets.create(facetHost, data, { embedHeight: 1500 });
 
         var byYear = chartPanel('Publications per year', 'wide', 'Click a bar to filter to that year.');
+        // The type legend is HTML, not ECharts: it wraps to as many lines as
+        // a narrow screen needs and pushes the chart down instead of drawing
+        // over it. Hidden types survive redraws.
+        var yearLegend = el('div', 'legend chart-legend');
+        byYear.panel.insertBefore(yearLegend, byYear.box);
+        var hiddenTypes = {};
         var byType = chartPanel('Publication types');
         var byTopic = data.clusters ? chartPanel('Topics', null, 'Groups of similar publications on the semantic map.') : null;
         var byKeyword = chartPanel('Top keywords');
@@ -85,7 +91,7 @@
         var listPanel = el('section', 'panel wide');
         var listHead = el('h2');
         var listBody = el('div');
-        var csv = el('button', 'btn', 'Download list (CSV)');
+        var csv = el('button', 'btn dash-csv', 'Download list (CSV)');
         csv.type = 'button';
         listPanel.appendChild(listHead);
         listPanel.appendChild(listBody);
@@ -125,8 +131,10 @@
             var yearOption = baseOption();
             yearOption.tooltip.trigger = 'axis';
             yearOption.tooltip.axisPointer = { type: 'shadow' };
-            yearOption.legend = { top: 0, textStyle: { color: ns.THEME.textMuted }, inactiveColor: ns.THEME.grid };
-            yearOption.grid = { left: 40, right: 12, top: 48, bottom: 28 };
+            var legendSelected = {};
+            typeCodes.forEach(function (code) { legendSelected[data.types[code]] = !hiddenTypes[data.types[code]]; });
+            yearOption.legend = { show: false, selected: legendSelected };
+            yearOption.grid = { left: 40, right: 12, top: 12, bottom: 28 };
             yearOption.xAxis = categoryAxis(yearList.map(String));
             yearOption.yAxis = valueAxis();
             yearOption.series = typeCodes.map(function (code, i) {
@@ -149,6 +157,23 @@
             });
             var yc = chart('year', byYear.box);
             yc.setOption(yearOption, true);
+            ns.setChildren(yearLegend, typeCodes.map(function (code) {
+                var name = data.types[code];
+                var item = el('button', 'legend-item');
+                item.type = 'button';
+                item.setAttribute('aria-pressed', hiddenTypes[name] ? 'false' : 'true');
+                item.title = 'Show or hide ' + name;
+                var sw = el('span', 'swatch');
+                sw.style.background = ns.typeColor(code);
+                item.appendChild(sw);
+                item.appendChild(el('span', null, name));
+                item.addEventListener('click', function () {
+                    hiddenTypes[name] = !hiddenTypes[name];
+                    item.setAttribute('aria-pressed', hiddenTypes[name] ? 'false' : 'true');
+                    yc.dispatchAction({ type: 'legendToggleSelect', name: name });
+                });
+                return item;
+            }));
 
             /* -- types -- */
             var typeCounts = counted(pubs.map(function (p) { return p.type; }));

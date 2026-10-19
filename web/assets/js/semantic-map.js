@@ -293,7 +293,8 @@
         var status = node('p', 'rv-status');
         var note = node('p', 'rv-note',
             'Only the distance between dots matters; the axes have no meaning. Pale dots have little or no '
-            + 'abstract and keywords, so their position is less reliable. Hold Ctrl and scroll to zoom; drag to move.');
+            + 'abstract and keywords, so their position is less reliable. '
+            + (window.matchMedia('(pointer: coarse)').matches ? 'Pinch to zoom; drag to move.' : 'Hold Ctrl and scroll to zoom; drag to move.'));
         panel.appendChild(toolbar);
         panel.appendChild(chartEl);
         panel.appendChild(status);
@@ -346,10 +347,24 @@
             sidebar.appendChild(node('p', 'side-hint', 'Click a dot to see the publication and its nearest neighbours.'));
         }
 
-        function select(index) {
+        // On a phone the side panel stacks under the map, below the fold, so
+        // a tap would change nothing visible: bring the panel (or, going
+        // back, the map) into view. Redraws pass no `reveal` and never scroll.
+        function stacked() { return window.matchMedia('(max-width: 760px)').matches; }
+        function bringIntoView(target) {
+            var top = target.getBoundingClientRect().top;
+            if (top >= 0 && top < window.innerHeight * 0.6) return;
+            target.scrollIntoView({ behavior: ns.prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+        }
+
+        function select(index, reveal) {
             selected = index == null ? null : items[index];
             draw(false);
-            if (!selected) { showOverview(); return; }
+            if (!selected) {
+                showOverview();
+                if (reveal && stacked()) bringIntoView(panel);
+                return;
+            }
             var pub = data.publications[index];
             ns.setChildren(sidebar);
             var tag = node('div', 'side-type', data.types[pub.type]);
@@ -405,7 +420,7 @@
                 b.appendChild(node('span', 'name', target.title));
                 b.appendChild(node('span', 'w', pair[1].toFixed(2)));
                 b.title = target.title + ' (cosine similarity ' + pair[1].toFixed(2) + ')';
-                b.addEventListener('click', function () { select(target.index); });
+                b.addEventListener('click', function () { select(target.index, true); });
                 wrap.appendChild(b);
             });
             sidebar.appendChild(wrap);
@@ -418,15 +433,17 @@
             open.style.textDecoration = 'none';
             var back = node('button', 'btn', 'Back to overview');
             back.type = 'button';
-            back.addEventListener('click', function () { select(null); });
+            back.addEventListener('click', function () { select(null, true); });
             actions.appendChild(open);
             actions.appendChild(back);
             sidebar.appendChild(actions);
+            // After the panel is filled: the page must be tall enough to scroll.
+            if (reveal && stacked()) bringIntoView(sidebar);
         }
 
         chart.on('click', function (params) {
             var index = params.data && params.data.index;
-            if (Number.isInteger(index)) select(index);
+            if (Number.isInteger(index)) select(index, true);
         });
         chart._rvRebuild = function () { draw(true); if (selected) select(selected.index); else showOverview(); };
 
@@ -436,7 +453,7 @@
             list.refresh();
             if (selected) select(selected.index); else showOverview();
         }));
-        toolbar.appendChild(searchControl(items, select));
+        toolbar.appendChild(searchControl(items, function (index) { select(index, true); }));
         toolbar.appendChild(node('div', 'rv-spacer'));
         var resetBtn = ns.iconButton(ns.ICONS.reset, 'Reset zoom and selection');
         resetBtn.addEventListener('click', function () {

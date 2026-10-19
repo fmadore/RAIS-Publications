@@ -156,7 +156,7 @@ html.no-controls .facets, html.no-controls .rv-toolbar { display: none; }
 .canvas { position: relative; height: 560px; min-height: 320px; border-radius: var(--radius); overflow: hidden; background: var(--surface); }
 @media (max-width: 760px) { .canvas { height: 420px; } }
 .sidebar { max-height: 560px; overflow: auto; font-size: .9rem; }
-@media (max-width: 760px) { .sidebar { max-height: none; } }
+@media (max-width: 760px) { .sidebar { max-height: none; } .stage > .panel { scroll-margin-top: 8px; } }
 .side-title { font-weight: 650; margin-bottom: 6px; }
 .side-hint { color: var(--muted); font-size: .85rem; }
 .side-sub { font-size: .75rem; font-weight: 650; text-transform: uppercase; letter-spacing: .04em; color: var(--text-2); margin: 12px 0 4px; }
@@ -180,6 +180,12 @@ html.no-controls .facets, html.no-controls .rv-toolbar { display: none; }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .85rem; color: var(--text-2); margin-top: 8px; }
 .legend-item { display: inline-flex; align-items: center; gap: 6px; }
 .legend-note { font-size: .85rem; color: var(--text-2); }
+/* Toggleable chart legend (dashboard): wraps above the plot. */
+.chart-legend { gap: 0 14px; margin: 0 0 4px; }
+button.legend-item { padding: 4px 0; border: 0; background: none; color: inherit; cursor: pointer; text-align: left; }
+button.legend-item:hover span:last-child { color: var(--text); }
+button.legend-item[aria-pressed="false"] { opacity: .45; }
+button.legend-item[aria-pressed="false"] span:last-child { text-decoration: line-through; }
 
 /* Publication list (side panels, dashboard) */
 .pub-list { list-style: none; margin: 0; padding: 0; }
@@ -232,6 +238,7 @@ details.rv-list > summary { cursor: pointer; color: var(--text-2); }
 @media (max-width: 760px) { .dash-grid { grid-template-columns: minmax(0, 1fr); } }
 .dash-chart { height: 320px; }
 .dash-chart.tall { height: 420px; }
+.dash-csv { margin-top: 8px; }
 .stat-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 12px; }
 @media (max-width: 760px) { .stat-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; }
