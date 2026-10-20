@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "RAIS publications"
+abstract: >-
+  Embeddable visualisations of the RAIS publications in ERef Bayreuth: a
+  semantic map (EmbeddingGemma + UMAP), keyword and co-author networks, and a
+  dashboard. A Python pipeline builds a static site, deployed weekly to GitHub
+  Pages.
+authors:
+  - given-names: Frédérick
+    family-names: Madore
+    email: frederick.madore@uni-bayreuth.de
+    affiliation: University of Bayreuth
+    orcid: "https://orcid.org/0000-0003-0959-2092"
+    website: "https://www.frederickmadore.com/"
+version: 0.1.0
+license: GPL-3.0-or-later
+url: "https://fmadore.github.io/RAIS-Publications/"
+repository-code: "https://github.com/fmadore/RAIS-Publications"
+keywords:
+  - bibliometrics
+  - scholarly publications
+  - data visualisation
+  - semantic map
+  - embeddings
+  - network visualisation
+  - University of Bayreuth

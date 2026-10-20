@@ -3,7 +3,13 @@ name = "rais-publications"
 version = "0.1.0"
 description = "Static, iframe-embeddable visualisations of the RAIS publications recorded in ERef Bayreuth."
 license = "GPL-3.0-or-later"
+authors = [{ name = "Frédérick Madore", email = "frederick.madore@uni-bayreuth.de" }]
 requires-python = ">=3.12"
+
+[project.urls]
+Homepage = "https://fmadore.github.io/RAIS-Publications/"
+Repository = "https://github.com/fmadore/RAIS-Publications"
+Author = "https://www.frederickmadore.com/"
 
 [tool.setuptools]
 packages = ["rais"]
