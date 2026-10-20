@@ -1,0 +1,32 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+
+  # requirements.txt and requirements-dev.txt. The EmbeddingGemma stack in
+  # requirements-model.txt is pinned to DREVisualizations' model contract
+  # (and the vector cache is keyed on the model revision, not on these
+  # versions), so it is upgraded by hand. Ignoring it also stops security
+  # PRs for those packages; Dependabot alerts still report them.
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      python:
+        patterns: ["*"]
+        update-types: [minor, patch]
+    ignore:
+      - dependency-name: torch
+      - dependency-name: torchvision
+      - dependency-name: pillow
+      - dependency-name: transformers
+      - dependency-name: sentence-transformers
+      - dependency-name: numba
+      - dependency-name: scikit-learn
+      - dependency-name: umap-learn
